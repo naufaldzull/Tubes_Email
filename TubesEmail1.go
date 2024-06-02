@@ -47,13 +47,13 @@ func main() {
 		case 2:
 			adminApproval()
 		case 3:
-			sendEmail() // masih harus dibenerin entah apa
+			sendEmail() 
 		case 4:
 			viewInbox()
 		case 5:
 			replyEmail()
 		case 6:
-			deleteEmail() // delete email gabisa milih email yg mana yg mau dihapus, cuma bisa milih subject nya apa
+			deleteEmail() 
 		case 7:
 			return
 		default:
@@ -262,7 +262,7 @@ func selectionSortEmail(arr *[maxEmails]email, n int, ascending bool) {
 				minIdx = j
 			}
 		}
-		arr[i], arr[minIdx] = arr[minIdx], arr[i] // kek gini biar gausah make temp
+		arr[i], arr[minIdx] = arr[minIdx], arr[i]
 	}
 }
 func binarySearchEmail(arr []email, subject string) int {
@@ -279,6 +279,3 @@ func binarySearchEmail(arr []email, subject string) int {
 	}
 	return -1
 }
-
-// 1. reply ama message masih aneh huruf pertamanya ga ke output
-// 2. delete yg pake binary butuh dipelajarin
