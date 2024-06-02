@@ -219,31 +219,6 @@ func deleteEmail() {
 		fmt.Println("Email not found.")
 	}
 }
-
-/*func printInbox() {
-	var username string
-	fmt.Print("Enter your username: ")
-	fmt.Scan(&username)
-	if !isUserActive(username) {
-		fmt.Println("User not active or not found.")
-		return
-	}
-
-	fmt.Println("Inbox:")
-	inbox := []Email{}
-	for i := 0; i < emailCount; i++ {
-		if emails[i].to == username {
-			inbox = append(inbox, emails[i])
-		}
-	}
-
-	selectionSortEmails(inbox, true)
-
-	for _, email := range inbox {
-		fmt.Printf("From: %s, Subject: %s\n", email.from, email.subject)
-	}
-} */
-
 func isUserActive(username string) bool {
 	for i := 0; i < userCount; i++ {
 		if users[i].username == username && users[i].active {
