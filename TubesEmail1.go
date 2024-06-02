@@ -65,7 +65,7 @@ func main() {
 func registerUser() {
 	var username, password, email string
 	if userCount >= maxUsers {
-		fmt.Println("User limit reached.")
+		fmt.Println("Batas pengguna tercapai.")
 		return
 	}
 	fmt.Print("Masukan username: ")
