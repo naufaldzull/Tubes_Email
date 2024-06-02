@@ -21,7 +21,7 @@ type email struct {
 	from    string
 	to      string
 	subject string
-	body    string
+	message string
 }
 
 var users [maxUsers]user
@@ -32,10 +32,10 @@ func main() {
 	var choice int
 	for {
 		fmt.Println("1. Register User")
-		fmt.Println("2. Admin Approval")
-		fmt.Println("3. Send Email")
-		fmt.Println("4. View Inbox")
-		fmt.Println("5. Reply to Email")
+		fmt.Println("2. Persetujuan Admin")
+		fmt.Println("3. Kirim Email")
+		fmt.Println("4. Lihat Inbox")
+		fmt.Println("5. Reply Email")
 		fmt.Println("6. Delete Email")
 		fmt.Println("7. Exit")
 		fmt.Print("Enter choice: ")
@@ -45,19 +45,19 @@ func main() {
 		case 1:
 			registerUser()
 		case 2:
-			adminApproval()
+			persetujuanAdmin()
 		case 3:
-			sendEmail() 
+			kirimEmail()
 		case 4:
-			viewInbox()
+			lihatInbox()
 		case 5:
 			replyEmail()
 		case 6:
-			deleteEmail() 
+			deleteEmail()
 		case 7:
 			return
 		default:
-			fmt.Println("Invalid choice, please try again.")
+			fmt.Println("Pilihan tidak valid, harap coba lagi.")
 		}
 	}
 }
@@ -68,83 +68,70 @@ func registerUser() {
 		fmt.Println("User limit reached.")
 		return
 	}
-	fmt.Print("Enter username: ")
+	fmt.Print("Masukan username: ")
 	fmt.Scan(&username)
-	fmt.Print("Enter password: ")
+	fmt.Print("Masukan password: ")
 	fmt.Scan(&password)
-	fmt.Print("Enter email: ")
+	fmt.Print("Masukan email: ")
 	fmt.Scan(&email)
 	users[userCount] = user{username, password, email, false}
 	userCount++
-	fmt.Println("User registered, pending admin approval.")
+	fmt.Println("User registered, menunggu persetujuan admin.")
 }
 
-func adminApproval() {
+func persetujuanAdmin() {
 	var response string
 	for i := 0; i < userCount; i++ {
 		if !users[i].active {
-			fmt.Printf("Approve user %s (yes/no)? ", users[i].username)
+			fmt.Printf("Terima user %s (yes/no)? ", users[i].username)
 			fmt.Scan(&response)
 			if strings.ToLower(response) == "yes" {
 				users[i].active = true
-				fmt.Println("User approved.")
+				fmt.Println("User diterima.")
 			} else {
-				fmt.Println("User not approved.")
+				fmt.Println("User tidak diterima.")
 			}
 		}
 	}
 }
 
-func sendEmail() {
+func kirimEmail() {
 	var from, to, subject, message string
-	fmt.Print("Enter your username: ")
+	fmt.Print("Masukan username kamu: ")
 	fmt.Scan(&from)
 	if !isUserActive(from) {
-		fmt.Println("User not active or not found.")
+		fmt.Println("User tidak aktif atau tidak ketemu.")
 		return
 	}
-	fmt.Print("Enter recipient username: ")
+	fmt.Print("Masukkan username penerima: ")
 	fmt.Scan(&to)
 	if !isUserActive(to) {
-		fmt.Println("Recipient not active or not found.")
+		fmt.Println("User tidak aktif atau tidak ketemu.")
 		return
 	}
-	fmt.Print("Enter subject: ")
+	fmt.Print("Masukan subject: ")
 	fmt.Scan(&subject)
-	fmt.Print("Enter Message: ")
+	fmt.Print("Masukan Message: ")
 	fmt.Scanln()
 	message = readMultilineInput()
 
 	if emailCount >= maxEmails {
-		fmt.Println("Email limit reached.")
+		fmt.Println("Batas email tercapai.")
 		return
 	}
 
 	emails[emailCount] = email{from, to, subject, message}
 	emailCount++
-	fmt.Println("Email sent.")
+	fmt.Println("Email terkirim.")
 }
-
-func readMultilineInput() string {
-	var lines []string
-	var line string
-	for line != "." {
-		fmt.Scanf("%s\n", &line)
-		if line != "." {
-			lines = append(lines, line)
-		}
-	}
-
-	return strings.Join(lines, " ")
-}
-func viewInbox() {
+func lihatInbox() {
 	var username string
 	var inbox [maxEmails]email
 	var inboxCount int
-	fmt.Print("Enter your username: ")
+	fmt.Print("Masukan username kamu: ")
 	fmt.Scan(&username)
 	if !isUserActive(username) {
-		fmt.Println("User not active or not found.")
+		fmt.Println("User tidak aktif atau tidak ketemu.")
 		return
 	}
 
@@ -162,47 +149,47 @@ func viewInbox() {
 		i = i + 1
 		fmt.Printf("No: %d\n", i)
 		i = i - 1
-		fmt.Printf("From: %s, Subject: %s\n", inbox[i].from, inbox[i].subject)
-		fmt.Println("Body:", inbox[i].body)
+		fmt.Printf("Dari: %s, Subject: %s\n", inbox[i].from, inbox[i].subject)
+		fmt.Println("Pesan:", inbox[i].message)
 	}
 }
 
 func replyEmail() {
-	var username, to, subject, body string
-	fmt.Print("Enter your username: ")
+	var username, to, subject, message string
+	fmt.Print("Masukan username kamu: ")
 	fmt.Scan(&username)
 	if !isUserActive(username) {
-		fmt.Println("User not active or not found.")
+		fmt.Println("User tidak aktif atau tidak ketemu.")
 		return
 	}
 
-	fmt.Print("Enter recipient username: ")
+	fmt.Print("Masukkan username penerima: ")
 	fmt.Scan(&to)
 	if !isUserActive(to) {
-		fmt.Println("Recipient not active or not found.")
+		fmt.Println("User tidak aktif atau tidak ketemu.")
 		return
 	}
-	fmt.Print("Enter subject: ")
+	fmt.Print("Masukan subject: ")
 	fmt.Scan(&subject)
-	fmt.Print("Enter Reply Message: ")
+	fmt.Print("Tulis balasan Message: ")
 	fmt.Scanln()
-	body = readMultilineInput()
+	message = readMultilineInput()
 
-	emails[emailCount] = email{username, to, subject, body}
+	emails[emailCount] = email{username, to, subject, message}
 	emailCount++
-	fmt.Println("Email sent.")
+	fmt.Println("Email terkirim.")
 }
 
 func deleteEmail() {
 	var username, subject string
-	fmt.Print("Enter your username: ")
+	fmt.Print("Masukan username kamu: ")
 	fmt.Scan(&username)
 	if !isUserActive(username) {
-		fmt.Println("User not active or not found.")
+		fmt.Println("User tidak aktif atau tidak ketemu.")
 		return
 	}
 
-	fmt.Print("Enter subject of the email to delete: ")
+	fmt.Print("Masukan subject dari email yang ingin di delete: ")
 	fmt.Scan(&subject)
 
 	selectionSortEmail(&emails, emailCount, true)
@@ -216,7 +203,7 @@ func deleteEmail() {
 		emailCount = emailCount - 1
 		fmt.Println("Email deleted.")
 	} else {
-		fmt.Println("Email not found.")
+		fmt.Println("Email Tidak Ketemu.")
 	}
 }
 func isUserActive(username string) bool {
@@ -253,4 +240,17 @@ func binarySearchEmail(arr []email, subject string) int {
 		}
 	}
 	return -1
+}
+func readMultilineInput() string {
+	var lines []string
+	var line string
+	for line != "." {
+		fmt.Scanf("%s", &line)
+		if line != "." {
+			lines = append(lines, line)
+			line = ""
+		}
+	}
+
+	return strings.Join(lines, " ")
 }
